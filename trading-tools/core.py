@@ -1,7 +1,7 @@
-import requests
 import configparser
 import praw
 import sys
+from decimal import Decimal
 
 
 submission_id = None
@@ -38,21 +38,21 @@ def get_comments(reddit):
         # check line contains ES:
         # remove empty space before/after
         # parse to decimal or float or something
-        indices = {'Hello': None}
-
         for line in lines:
             hello = line.split('Hello:')
             if len(hello) > 1:
-                indices['Hello'] = {'user': 'testperson', 'price': hello[2]}
-
-        comments.append(indices)
+                try:
+                    price = Decimal(hello[1])
+                    comments.append( {'user': top_level_comment.author.name, 'price': price})
+                except Exception as e:
+                    print(e)
 
     return comments
 
 
 def announce_winner(comments):
-    seq = [x[''] for x in comments]
-    return min(seq)
+    winner = max(comments, key=lambda x: x['price'])
+    print(winner)
 
 def get_config():
     config_path = sys.argv[1] if len(sys.argv) > 1 else '../config.ini'
@@ -67,24 +67,6 @@ def main():
     comments = get_comments(reddit)
     announce_winner(comments)
 
-    # client_id = parser.get('Reddit', 'client_id')
-    # client_secret = parser.get('Reddit', 'client_secret')
-    # username = parser.get('Reddit', 'username')
-    # password = parser.get('Reddit', 'password')
-    #
-    # reddit = praw.Reddit(client_id=client_id,
-    #                      client_secret=client_secret,
-    #                      username=username,
-    #                      password=password,
-    #                      user_agent='toy bot v1.0 by /u/spoosman')
-
 
 if __name__== "__main__":
     main()
-
-
-# r = requests.get('https://www.reddit.com/api/v1/me')
-#
-# print('hello')
-#
-# print(r.text)
