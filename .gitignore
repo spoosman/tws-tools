@@ -1,5 +1,8 @@
 # taken from https://github.com/github/gitignore/blob/master/Python.gitignore
 
+# intellij
+.idea
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
