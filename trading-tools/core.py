@@ -1,16 +1,15 @@
-import configparser
 import praw
-import sys
 from decimal import Decimal
-
+from config import CONFIG
 
 submission_id = None
 
-def get_reddit(config):
-    client_id = config.get('Reddit', 'client_id')
-    client_secret = config.get('Reddit', 'client_secret')
-    username = config.get('Reddit', 'username')
-    password = config.get('Reddit', 'password')
+
+def get_reddit():
+    client_id = CONFIG.get('Reddit', 'client_id')
+    client_secret = CONFIG.get('Reddit', 'client_secret')
+    username = CONFIG.get('Reddit', 'username')
+    password = CONFIG.get('Reddit', 'password')
     reddit = praw.Reddit(client_id=client_id,
                          client_secret=client_secret,
                          username=username,
@@ -54,18 +53,12 @@ def announce_winner(comments):
     winner = max(comments, key=lambda x: x['price'])
     print(winner)
 
-def get_config():
-    config_path = sys.argv[1] if len(sys.argv) > 1 else '../config.ini'
-    config_parser = configparser.ConfigParser()
-    config_parser.read(config_path)
-    return config_parser
-
 def main():
-    config = get_config()
-    reddit = get_reddit(config)
+    print('asf')
+    reddit = get_reddit()
     # create_poll(reddit)
-    comments = get_comments(reddit)
-    announce_winner(comments)
+    # comments = get_comments(reddit)
+    # announce_winner(comments)
 
 
 if __name__== "__main__":
